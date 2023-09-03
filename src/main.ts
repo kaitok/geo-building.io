@@ -1,24 +1,65 @@
 import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import maplibregl from 'maplibre-gl'
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+const map = new maplibregl.Map({
+  style:
+      'https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
+  center: [-74.0066, 40.7135],
+  zoom: 15.5,
+  pitch: 45,
+  bearing: -17.6,
+  container: 'map',
+  antialias: true
+});
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+// The 'building' layer in the streets vector source contains building-height
+// data from OpenStreetMap.
+map.on('load', () => {
+  // Insert the layer beneath any symbol layer.
+  const layers = map.getStyle().layers;
+
+  let labelLayerId;
+  for (let i = 0; i < layers.length; i++) {
+      if (layers[i].type === 'symbol' && layers[i].layout['text-field']) {
+          labelLayerId = layers[i].id;
+          break;
+      }
+  }
+
+  map.addLayer(
+      {
+          'id': '3d-buildings',
+          'source': 'openmaptiles',
+          'source-layer': 'building',
+          'filter': ['==', 'extrude', 'true'],
+          'type': 'fill-extrusion',
+          'minzoom': 15,
+          'paint': {
+              'fill-extrusion-color': '#aaa',
+
+              // use an 'interpolate' expression to add a smooth transition effect to the
+              // buildings as the user zooms in
+              'fill-extrusion-height': [
+                  'interpolate',
+                  ['linear'],
+                  ['zoom'],
+                  15,
+                  0,
+                  15.05,
+                  ['get', 'height']
+              ],
+              'fill-extrusion-base': [
+                  'interpolate',
+                  ['linear'],
+                  ['zoom'],
+                  15,
+                  0,
+                  15.05,
+                  ['get', 'min_height']
+              ],
+              'fill-extrusion-opacity': 0.6
+          }
+      },
+      labelLayerId
+  );
+});
