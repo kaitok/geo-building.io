@@ -14,19 +14,47 @@ const map = new maplibregl.Map({
 });
 
 map.on('load', () => {
+
+  let features = map.querySourceFeatures('v3-openmaptiles', {sourceLayer:'building'});
+  features.map((f:any) => { 
+    let height = getRandomInt()
+    console.log(height)
+    f.properties.render_height = height
+    f.properties.render_min_height = 0
+  })
+  console.log(features);
+
+  map.addSource('custom-buildings', {
+    type: 'geojson',
+    data: {
+      "type": "FeatureCollection",
+      "features": features
+    }
+  })
+
   map.addLayer(
       {
           'id': '3d-buildings',
-          'source': 'v3-openmaptiles',
-          'source-layer': 'building',
+          'source': 'custom-buildings',
+          'source-layer': '',
           'type': 'fill-extrusion',
-          'minzoom': 15,
+          'minzoom': 10,
           'paint': {
               'fill-extrusion-color': '#8114E1',
-              'fill-extrusion-opacity': 0.7,
+              'fill-extrusion-opacity': 1,
               'fill-extrusion-height': ['get', 'render_height'],
               'fill-extrusion-base': ['get', 'render_min_height']
           }
       },
   );
 });
+
+
+function getRandomInt() {
+  const randomNumber = Math.random();
+  if (randomNumber < 0.05) {
+    return Math.floor(Math.random() * (250 - 200 + 1)) + 200;
+  } else {
+    return Math.floor(Math.random() * (20 - 10 + 1)) + 10;
+  }
+}
