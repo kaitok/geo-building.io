@@ -2,8 +2,7 @@
 <h1>geo-building.io</h1>
 <h5>[WIP]simple 3d buildings editor for osm data</h5>
 
-![random_building_height_kyoto](https://github.com/kaitok/geo-building.io/assets/5301304/b43bf310-0b1d-4c0c-ad24-0d47035a7be2)
-Random building height (Kyoto)
+<img width="914" alt="floating_kyoto_tower" src="https://github.com/kaitok/geo-building.io/assets/5301304/64618a8c-b3cc-4f5b-87bd-6d3604f496f3">
 
 
 </div>
