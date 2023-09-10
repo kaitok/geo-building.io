@@ -4,22 +4,64 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@3.3.1/dist/maplibre-gl.css' />
+    <link rel='stylesheet'
+      href='https://unpkg.com/maplibre-gl@3.3.1/dist/maplibre-gl.css' />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet">
     <title>geo-building.io</title>
     <style>
       html,
       body {
         height: 100%;
         padding: 0;
-        margin: 0;
+        margin: auto;
+        font-family: 'Inter', sans-serif;
+        overflow: hidden;
       }
       #map {
         z-index: 0;
         height: 100%;
+        margin-left: 450px;
+      }
+      .sidebar {
+        max-width: 450px;
+        width: 450px;
+        background:#fff;
+        position: absolute;
+        left: 0;
+        height: 100%;
+        z-index: 1;
+        padding: 25px;
+        overflow-wrap: break-word;
+        overflow-x: scroll;
+        font-size: 13px;
+      }
+      .selected_feature {
+        margin-top: 50px;
+      }
+      .selected_feature p {
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .title {
+        font-size: 18px;
+        font-weight: 600;
       }
     </style>
   </head>
   <body>
+    <div class="sidebar">
+      <div class="title">
+        geo-building.io
+      </div>
+      <div class="selected_feature">
+        <p>Selected feature</p>
+        <div id="features"></div>
+      </div>
+    </div>
     <div id="map"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
