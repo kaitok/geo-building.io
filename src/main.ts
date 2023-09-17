@@ -2,6 +2,7 @@ import "./style.css"
 import maplibregl, { Feature, Map, MapGeoJSONFeature } from "maplibre-gl"
 import { FeatureCollection } from "./type/geojson"
 import { JSONEditor } from "vanilla-jsoneditor"
+import MaplibreDraw from "./draw/main"
 
 window.onload = () => {
   const map: Map = new maplibregl.Map({
@@ -15,6 +16,12 @@ window.onload = () => {
     container: "map",
     antialias: true,
     hash: true,
+  })
+
+  MaplibreDraw(map)
+
+  map.on("draw.create", function (e) {
+    console.log(e.drawMode)
   })
 
   map.on("load", () => {
