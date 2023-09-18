@@ -1,6 +1,10 @@
 import { Map, MapLayerTouchEvent } from "maplibre-gl"
 
-export default function pointDraw(map: Map, e: MapLayerTouchEvent) {
+export default function pointDraw(
+  map: Map,
+  soruceId: string,
+  e: MapLayerTouchEvent
+) {
   let coordinates = e.lngLat
   let newPoint = {
     type: "Feature",
@@ -10,7 +14,7 @@ export default function pointDraw(map: Map, e: MapLayerTouchEvent) {
     },
     properties: {},
   }
-  let source = map.getSource("draw-features")
+  let source = map.getSource(soruceId)
   let data = source._data
   data.features.push(newPoint)
   source.setData(data)

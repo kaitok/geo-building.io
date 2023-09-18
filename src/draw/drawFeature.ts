@@ -12,6 +12,16 @@ export default function drawFeature(map: Map, drawMode: string) {
     })
   }
 
+  if (!map.getSource("draw-features-edit")) {
+    map.addSource("draw-features-edit", {
+      type: "geojson",
+      data: {
+        type: "FeatureCollection",
+        features: [],
+      },
+    })
+  }
+
   if (drawMode === "point") {
     if (!map.getLayer("draw-point-layer")) {
       map.addLayer({
@@ -24,7 +34,8 @@ export default function drawFeature(map: Map, drawMode: string) {
         },
       })
       map.on("click", function (e: MapLayerTouchEvent) {
-        pointDraw(map, e)
+        if (drawMode !== "point") return
+        pointDraw(map, "draw-features", e)
       })
     }
   } else if (drawMode === "line") {
@@ -40,6 +51,27 @@ export default function drawFeature(map: Map, drawMode: string) {
       })
     }
   } else if (drawMode === "polygon") {
+    if (!map.getLayer("draw-polygon-layer-edit")) {
+      map.addLayer({
+        id: "draw-polygon-layer-point-edit",
+        type: "circle",
+        source: "draw-features-edit",
+        paint: {
+          "circle-radius": 6,
+          "circle-color": "#4cbb17",
+        },
+      })
+      map.addLayer({
+        id: "draw-polygon-layer-edit",
+        type: "fill",
+        source: "draw-features-edit",
+        paint: {
+          "fill-color": "#4cbb17",
+          "fill-opacity": 0.5,
+        },
+      })
+    }
+
     if (!map.getLayer("draw-polygon-layer")) {
       map.addLayer({
         id: "draw-polygon-layer",
@@ -51,6 +83,11 @@ export default function drawFeature(map: Map, drawMode: string) {
         },
       })
     }
+
+    map.on("click", function (e: MapLayerTouchEvent) {
+      if (drawMode !== "polygon") return
+      pointDraw(map, "draw-features-edit", e)
+    })
   }
 
   map.fire("draw.create", { drawMode })
