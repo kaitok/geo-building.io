@@ -1,4 +1,4 @@
-import { Map, MapLayerTouchEvent, MapLibreEvent } from "maplibre-gl"
+import { Map, MapLayerTouchEvent } from "maplibre-gl"
 
 export default function pointDraw(map: Map, e: MapLayerTouchEvent) {
   let coordinates = e.lngLat

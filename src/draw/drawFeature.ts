@@ -1,14 +1,16 @@
-import { Map } from "maplibre-gl"
+import { Map, MapLayerTouchEvent } from "maplibre-gl"
 import pointDraw from "./drawActions/pointDraw"
 
 export default function drawFeature(map: Map, drawMode: string) {
-  map.addSource("draw-features", {
-    type: "geojson",
-    data: {
-      type: "FeatureCollection",
-      features: [],
-    },
-  })
+  if (!map.getSource("draw-features")) {
+    map.addSource("draw-features", {
+      type: "geojson",
+      data: {
+        type: "FeatureCollection",
+        features: [],
+      },
+    })
+  }
 
   if (drawMode === "point") {
     if (!map.getLayer("draw-point-layer")) {
@@ -21,7 +23,7 @@ export default function drawFeature(map: Map, drawMode: string) {
           "circle-color": "#3170c9",
         },
       })
-      map.on("click", function (e) {
+      map.on("click", function (e: MapLayerTouchEvent) {
         pointDraw(map, e)
       })
     }
