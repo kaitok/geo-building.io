@@ -1,5 +1,6 @@
 import { Map, MapLayerTouchEvent } from "maplibre-gl"
 import pointDraw from "./drawActions/pointDraw"
+import polygonDraw from "./drawActions/polygonDraw"
 
 export default function drawFeature(map: Map, drawMode: string) {
   if (!map.getSource("draw-features")) {
@@ -87,8 +88,7 @@ export default function drawFeature(map: Map, drawMode: string) {
     map.on("click", function (e: MapLayerTouchEvent) {
       if (drawMode !== "polygon") return
       pointDraw(map, "draw-features-edit", e)
+      polygonDraw(map, "draw-features-edit")
     })
   }
-
-  map.fire("draw.create", { drawMode })
 }

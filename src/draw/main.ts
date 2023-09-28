@@ -8,13 +8,13 @@ export default function MaplibreDraw(map: Map) {
   const containerClassName = "maplibregl-ctrl-top-right"
   const container = document.querySelector(`.${containerClassName}`)
   let activeButton: HTMLButtonElement | null = null
+  let drawMode = ""
 
   if (container) {
     const control = document.createElement("div")
     control.className = "maplibregl-ctrl maplibregl-ctrl-group"
 
     const buttonNames = ["point", "line", "polygon", "delete"]
-    let drawMode = ""
 
     buttonNames.forEach((buttonName) => {
       const button = document.createElement("button")

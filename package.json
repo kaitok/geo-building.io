@@ -18,6 +18,7 @@
     "vite": "^4.4.5"
   },
   "dependencies": {
+    "@turf/turf": "^6.5.0",
     "maplibre-gl": "^3.3.1",
     "vanilla-jsoneditor": "^0.18.3"
   }
